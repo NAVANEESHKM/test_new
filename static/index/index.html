@@ -4,64 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OAuth Example</title>
+    <title>Google OAuth Login</title>
 </head>
 
 <body>
-    <h1>OAuth Example</h1>
-    <button onclick="authorize()">Authorize</button>
+    <h1>Google OAuth Login Example</h1>
+    <button onclick="authorize()">Login with Google</button>
 
     <script>
         function authorize() {
-            var clientId = '895318556149-1ukshl6uol3qf8qse2cqo4745otcbc4f.apps.googleusercontent.com';
-            var clientSecret = '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';
-            var authorizationBaseUrl = 'https://navaneeshkm.up.railway.app';
-            var tokenUrl = 'https://oauth2.googleapis.com/token';
-            var redirectUri = 'https://navaneeshkm.up.railway.app/front';
-            var scope = 'profile email';
+            var clientId = '895318556149-1ukshl6uol3qf8qse2cqo4745otcbc4f.apps.googleusercontent.com'; // Replace with your Google OAuth client ID
+            var redirectUri = 'https://navaneeshkm.up.railway.app/front'; // Replace with your redirect URI
+            var scope = 'openid profile email'; // Scopes for accessing user profile and email
 
-            // Redirect the user to the OAuth provider's authorization URL
-            var authorizationUrl = authorizationBaseUrl + '?client_id=' + encodeURIComponent(clientId) +
+            // Construct the authorization URL
+            var authorizationUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+                'response_type=token' +
+                '&client_id=' + encodeURIComponent(clientId) +
                 '&redirect_uri=' + encodeURIComponent(redirectUri) +
-                '&response_type=code' +
                 '&scope=' + encodeURIComponent(scope);
+
+            // Redirect the user to the Google OAuth authorization URL
             window.location.href = authorizationUrl;
-        }
-
-        // Function to exchange authorization code for access token
-        function exchangeCodeForToken(code) {
-            var clientId = '895318556149-1ukshl6uol3qf8qse2cqo4745otcbc4f.apps.googleusercontent.com';
-            var clientSecret = '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';
-            var tokenUrl = 'https://oauth2.googleapis.com/token';
-            var redirectUri = 'https://navaneeshkm.up.railway.app/front';
-
-            // Prepare token request parameters
-            var params = new URLSearchParams();
-            params.append('grant_type', 'authorization_code');
-            params.append('code', code);
-            params.append('redirect_uri', redirectUri);
-            params.append('client_id', clientId);
-            params.append('client_secret', clientSecret);
-
-            // Make a POST request to exchange code for token
-            fetch(tokenUrl, {
-                method: 'POST',
-                body: params
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Access Token:', data.access_token);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        // Parse the authorization code from the URL and exchange it for an access token
-        var urlParams = new URLSearchParams(window.location.search);
-        var code = urlParams.get('code');
-        if (code) {
-            exchangeCodeForToken(code);
         }
     </script>
 </body>
